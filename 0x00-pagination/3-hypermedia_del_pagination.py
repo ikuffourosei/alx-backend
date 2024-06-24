@@ -27,7 +27,7 @@ class Server:
             self.__dataset = dataset[1:]
 
         return self.__dataset
-    
+
     def index_range(page: int, page_size: int) -> Tuple:
         """Returns a tuple of size two containing a start index and end index
         corresponding to the range of indexes to return in a list for those
