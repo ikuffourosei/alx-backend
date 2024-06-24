@@ -37,7 +37,7 @@ class Server:
         if start >= len(data):
             return []
         result = data[start: end]
-        return result                 
+        return result
 
 
 def index_range(page: int, page_size: int) -> Tuple:
