@@ -33,7 +33,7 @@ class Server:
         assert page > 0, 'page must be greater than 0'
         assert page_size > 0, 'page_size must be greater than 0'
         data = self.dataset()
-        pages = self.index_range(page, page_size)
+        pages = Server.index_range(page, page_size)
         start, end = pages
         if start >= len(data):
             return []
@@ -48,6 +48,22 @@ class Server:
         end_ind = page * page_size
         result = (start_ind, end_ind)
         return result
-    
+
     def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict:
-        """Returns a diction"""
+        """Returns a dictionary"""
+        results = {}
+        results['page_size'] = page_size
+        results['page'] = page
+        results['data'] = self.get_page(page, page_size)
+        if page < len(self.dataset()):
+            next_page = page + 1
+        else:
+            next_page = None
+        results['next_page'] = next_page
+        if page > 1:
+            prev_page = page - 1
+        else:
+            prev_page = None
+        results['prev_page'] = prev_page
+        results['total_pages'] = len(self.dataset())
+        return results

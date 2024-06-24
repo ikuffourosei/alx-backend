@@ -33,7 +33,7 @@ class Server:
         assert page > 0, 'page must be greater than 0'
         assert page_size > 0, 'page_size must be greater than 0'
         data = self.dataset()
-        pages = self.index_range(page, page_size)
+        pages = Server.index_range(page, page_size)
         start, end = pages
         if start >= len(data):
             return []
