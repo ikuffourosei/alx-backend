@@ -4,7 +4,7 @@
 
 import csv
 import math
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 
 class Server:
@@ -48,3 +48,6 @@ class Server:
         end_ind = page * page_size
         result = (start_ind, end_ind)
         return result
+    
+    def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict:
+        """Returns a diction"""
