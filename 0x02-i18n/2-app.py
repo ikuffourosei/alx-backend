@@ -19,9 +19,14 @@ class Config:
 myapp.config.from_object(Config)
 
 
+@babel.localeselector
+def get_locale() -> str | None:
+    return request.accept_languages.best_match(myapp.config['LANGUAGES'])
+
+
 @myapp.route('/', methods=['GET'], strict_slashes=False)
 def home():
-    return render_template('1-index.html')
+    return render_template('2-index.html')
 
 
 if __name__ == '__main__':
