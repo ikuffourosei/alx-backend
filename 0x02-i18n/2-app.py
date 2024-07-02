@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''A simple flask app'''
-from flask import Flask, request, g, render_template
+from flask import Flask, request, render_template
 from flask_babel import Babel
 from flask_cors import CORS
 
