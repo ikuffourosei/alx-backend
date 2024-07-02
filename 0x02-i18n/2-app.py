@@ -20,7 +20,7 @@ myapp.config.from_object(Config)
 
 
 @babel.localeselector
-def get_locale() -> str | None:
+def get_locale():
     return request.accept_languages.best_match(myapp.config['LANGUAGES'])
 
 
