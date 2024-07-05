@@ -29,7 +29,7 @@ def get_locale():
         return url_locale
     user_locale = getattr(g, 'user', None)
     if user_locale and user_locale.get('locale') in myapp.config['LANGUAGES']:
-        return user_locale.locale
+        return user_locale['locale']
     best_match = request.accept_languages.best_match(myapp.config['LANGUAGES'])
     if best_match:
         return best_match
@@ -44,7 +44,7 @@ def get_timezone():
     if url_timezone:
         try:
             zone = timezone(url_timezone)
-            return zone
+            return url_timezone
         except pytz.exceptions.UnknownTimeZoneError as e:
             pass
 
@@ -52,10 +52,10 @@ def get_timezone():
     if user_timezone:
         try:
             zone = timezone(user_timezone)
-            return zone
+            return user_timezone
         except pytz.exceptions.UnknownTimeZoneError as e:
             pass
-    return timezone(myapp.config['BABEL_DEFAULT_TIMEZONE'])
+    return myapp.config['BABEL_DEFAULT_TIMEZONE']
 
 
 users = {
@@ -85,8 +85,8 @@ def before_request():
 @myapp.route('/', methods=['GET'], strict_slashes=False)
 def home():
     """returns the home page"""
-    return render_template('5-index.html')
+    return render_template('7-index.html')
 
 
 if __name__ == '__main__':
-    myapp.run()
+    myapp.run(debug=True)
