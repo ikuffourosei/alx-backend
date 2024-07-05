@@ -11,10 +11,11 @@ myapp = Flask(__name__)
 cors = CORS(myapp, resources={r"/*": {'origins': "*"}})
 babel = Babel(myapp)
 
+
 class Config:
     LANGUAGES = ["en", "fr"]
     BABEL_DEFAULT_LOCALE = "en"
-    BABEL_DEFAULT_TIMEZONE = "fr"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
 
 
 myapp.config.from_object(Config)
@@ -35,12 +36,14 @@ def get_locale():
     else:
         return myapp.config['BABEL_DEFAULT_LOCALE']
 
+
 users = {
     1: {"name": "Balou", "locale": "fr", "timezone": "Europe/Paris"},
     2: {"name": "Beyonce", "locale": "en", "timezone": "US/Central"},
     3: {"name": "Spock", "locale": "kg", "timezone": "Vulcan"},
     4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
+
 
 def get_user():
     """Gets the user based on the id"""
@@ -49,12 +52,14 @@ def get_user():
         return users[int(id)]
     return None
 
+
 @myapp.before_request
 def before_request():
     """Action to do before a client request"""
     user = get_user()
     if user is not None:
         g.user = user
+
 
 @myapp.route('/', methods=['GET'], strict_slashes=False)
 def home():

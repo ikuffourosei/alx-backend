@@ -4,8 +4,8 @@
 from flask import Flask, g, render_template, request
 from flask_babel import Babel
 from flask_cors import CORS
-from typing import Dict
-
+from pytz import timezone
+import pytz
 
 myapp = Flask(__name__)
 cors = CORS(myapp, resources={r"/*": {'origins': "*"}})
@@ -24,12 +24,38 @@ myapp.config.from_object(Config)
 @babel.localeselector
 def get_locale():
     """Gets the best language match from user request"""
-    if request.args.get('locale') is not None:
-        lang = request.args.get('locale')
-        if lang in myapp.config['LANGUAGES']:
-            return lang
+    url_locale = request.args.get('locale')
+    if url_locale and url_locale in myapp.config['LANGUAGES']:
+        return url_locale
+    user_locale = getattr(g, 'user', None)
+    if user_locale and user_locale.get('locale') in myapp.config['LANGUAGES']:
+        return user_locale.locale
+    best_match = request.accept_languages.best_match(myapp.config['LANGUAGES'])
+    if best_match:
+        return best_match
     else:
-        return request.accept_languages.best_match(myapp.config['LANGUAGES'])
+        return myapp.config['BABEL_DEFAULT_LOCALE']
+
+
+@babel.timezoneselector
+def get_timezone():
+    """Gets the timezone"""
+    url_timezone = request.args.get('timezone')
+    if url_timezone:
+        try:
+            zone = timezone(url_timezone)
+            return zone
+        except pytz.exceptions.UnknownTimeZoneError as e:
+            pass
+
+    user_timezone = getattr(g, 'user', None)
+    if user_timezone:
+        try:
+            zone = timezone(user_timezone)
+            return zone
+        except pytz.exceptions.UnknownTimeZoneError as e:
+            pass
+    return timezone(myapp.config['BABEL_DEFAULT_TIMEZONE'])
 
 
 users = {

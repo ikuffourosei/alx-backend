@@ -10,10 +10,11 @@ myapp = Flask(__name__)
 cors = CORS(myapp, resources={r"/*": {'origins': "*"}})
 babel = Babel(myapp)
 
+
 class Config:
     LANGUAGES = ["en", "fr"]
     BABEL_DEFAULT_LOCALE = "en"
-    BABEL_DEFAULT_TIMEZONE = "fr"
+    BABEL_DEFAULT_TIMEZONE = "UTC"
 
 
 myapp.config.from_object(Config)
@@ -28,6 +29,7 @@ def get_locale():
             return lang
     else:
         return request.accept_languages.best_match(myapp.config['LANGUAGES'])
+
 
 @myapp.route('/', methods=['GET'], strict_slashes=False)
 def home():
